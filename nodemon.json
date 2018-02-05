@@ -1,5 +1,6 @@
 {
     "env": {
-        "PG_PW": "admin"
+        "PG_PW": "admin",
+        "JWT_KEY": "secret"
     }
 }

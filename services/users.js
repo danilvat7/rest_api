@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 module.exports = {
@@ -31,8 +32,17 @@ module.exports = {
                 const hash = data.rows[0].password;
                 const compHash = bcrypt.compareSync(password, hash);
                 if (compHash) {
+                    const token = jwt.sign({
+                            email: data.rows[0].email,
+                            userId: data.rows[0].id
+                        },
+                        process.env.JWT_KEY, {
+                            expiresIn: "24h"
+                        }
+                    );
                     return {
-                        message: "Auth successful!"
+                        message: "Auth successful!",
+                        token
                     }
                 } else {
                     const error = new Error('Incorrect password!');
